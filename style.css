@@ -1,0 +1,132 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  background: #ececec;
+  background: rgba(97, 177, 252, 0.466);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 25px;
+}
+.keyboard_wrapper {
+  width: 900px;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: -4px -4px 8px #fff, 4px 4px 8px #0002;
+}
+.keyboard_wrapper .display {
+  position: relative;
+  height: 200px;
+  padding: 20px;
+  font-family: inherit;
+  font-size: 18px;
+  overflow: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  border: 2px inset #fff;
+  border-radius: 15px;
+  box-shadow: inset 2px 2px 5px #0002, inset -2px -2px 5px #fff;
+}
+.keyboard_wrapper .display::before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  background-image: linear-gradient(45deg, #ffffff00, #0000001a);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.keyboard_wrapper .keys {
+  /* border: 1px solid green; */
+  margin-top: 20px;
+}
+.row {
+  text-transform: lowercase;
+  display: flex;
+
+  /* замениьт гапом */
+  justify-content: space-between;
+  /* gap: 3px; */
+  /* может надо удалить снизу марджин */
+  margin-bottom: 10px;
+}
+
+.row1 {
+}
+.key span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: 1px solid transparent;
+  transition: 0.3s;
+  border-radius: 7px;
+
+  box-shadow: 3px 3px 6px #0002, -3px -3px 6px #fff;
+  cursor: pointer;
+}
+.key span:hover,
+.key span .active {
+  /* border-color: orange; */
+  /* color: orangered; */
+}
+.key span:active,
+.key span .active {
+  /* border-color: orange; */
+  color: orangered;
+  box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #fff;
+}
+.esc {
+}
+.backspace {
+}
+.row2 {
+}
+.tab {
+}
+.backslash {
+}
+.row3 {
+}
+.caps-lock {
+}
+.enter {
+}
+.row4 {
+}
+.shift-left {
+}
+.up {
+}
+.shift-right {
+}
+.row5 {
+}
+.ctrl-left {
+}
+.alt-left {
+}
+.backquote {
+}
+.space {
+}
+.lang {
+}
+.alt-right {
+}
+.left {
+}
+.down {
+}
+.right {
+}
+.delete {
+}
