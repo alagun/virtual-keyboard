@@ -45,7 +45,7 @@ body {
   margin-top: 20px;
 }
 .row {
-  text-transform: lowercase;
+  /* text-transform: lowercase; */
   display: flex;
   gap: 10px;
   /* может надо удалить снизу марджин */
