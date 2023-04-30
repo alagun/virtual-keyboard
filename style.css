@@ -8,14 +8,12 @@ body {
   font-family: "Roboto", sans-serif;
   margin: 0;
   background: #ececec;
-  background: rgba(97, 177, 252, 0.466);
   display: flex;
   justify-content: center;
-  min-height: 100vh;
   padding: 25px;
 }
 .keyboard_wrapper {
-  width: 900px;
+  width: 930px;
   padding: 25px;
   border-radius: 15px;
   box-shadow: -4px -4px 8px #fff, 4px 4px 8px #0002;
@@ -44,89 +42,90 @@ body {
   top: 0;
 }
 .keyboard_wrapper .keys {
-  /* border: 1px solid green; */
   margin-top: 20px;
 }
 .row {
   text-transform: lowercase;
   display: flex;
-
-  /* замениьт гапом */
-  justify-content: space-between;
-  /* gap: 3px; */
+  gap: 10px;
   /* может надо удалить снизу марджин */
   margin-bottom: 10px;
 }
 
-.row1 {
+.key {
+  display: flex;
+  justify-content: center;
+  transition: 0.3s;
+  border-radius: 7px;
+  box-shadow: 3px 3px 6px #0002, -3px -3px 6px #fff;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
 }
 .key span {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border: 1px solid transparent;
-  transition: 0.3s;
-  border-radius: 7px;
-
-  box-shadow: 3px 3px 6px #0002, -3px -3px 6px #fff;
-  cursor: pointer;
 }
 .key span:hover,
 .key span .active {
   /* border-color: orange; */
   /* color: orangered; */
 }
-.key span:active,
+/* .key span:active,
 .key span .active {
-  /* border-color: orange; */
   color: orangered;
-  box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #fff;
+  box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #ffffff;
+  background: #dfdfdf;
+} */
+.key:active,
+.key .active {
+  color: orangered;
+  box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #ffffff;
+  background: #dfdfdf;
 }
-.esc {
+
+.row1 > div:last-child,
+.row2 > div:last-child,
+.row3 > div:last-child,
+.row4 > div:last-child,
+.row5 > div:nth-child(4) {
+  flex: auto;
 }
-.backspace {
+
+.esc,
+.up,
+.lang,
+.left,
+.down,
+.right {
+  background: #e0e0e0;
+  /* background: #f1ffff; */
 }
-.row2 {
+.backspace,
+.tab,
+.caps-lock,
+.shift-left,
+.shift-right,
+.ctrl-left,
+.alt-left,
+.alt-right,
+.delete {
+  background: #d9e0e0;
 }
-.tab {
+.enter,
+.space {
+  background: #e0e0d5;
 }
+.tab,
 .backslash {
-}
-.row3 {
+  width: calc(50px * 1.5);
 }
 .caps-lock {
-}
-.enter {
-}
-.row4 {
+  width: calc(50px * 1.75 + 10px);
 }
 .shift-left {
-}
-.up {
-}
-.shift-right {
-}
-.row5 {
-}
-.ctrl-left {
-}
-.alt-left {
+  width: calc(50px * 2 + 10px);
 }
 .backquote {
-}
-.space {
-}
-.lang {
-}
-.alt-right {
-}
-.left {
-}
-.down {
-}
-.right {
-}
-.delete {
 }
