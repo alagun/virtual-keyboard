@@ -21,6 +21,7 @@ body {
 .keyboard_wrapper .display {
   position: relative;
   height: 200px;
+  width: 100%;
   padding: 20px;
   font-family: inherit;
   font-size: 18px;

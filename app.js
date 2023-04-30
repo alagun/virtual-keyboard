@@ -1,17 +1,16 @@
 // async function runApp() {
 
-// let lang = "en";
-let lang = "ru";
-// let mode = "normal";
+let lang = "en";
+// let lang = "ru";
+let mode = "normal";
 // let mode = "shift";
-let mode = "caps";
+// let mode = "caps";
 // let mode = "capsOnShift";
 
 const keyboardHTML = `
 <div class="keyboard_wrapper">
-<pre class="display">
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt beatae vel quis aliquam rerum, tempore, deleniti recusandae dolore hic iure cum odio at expedita nihil quisquam veritatis ipsam dolor nesciunt?</pre
->
+<textarea class="display">
+</textarea>
 <div class="keys">
   <div class="row row1">
     <div class="key esc" data-code="Escape">
@@ -324,21 +323,81 @@ function mouseClickUp(event) {
   const key = event.target.closest(".key");
   if (!key) return;
   key.classList.remove("active");
+  // console.log(key.firstElementChild.innerText);
 }
 
 // обработчик кликов - ключ
+function mouseClickKey(event) {
+  // console.log("жмяк - код");
+  const key = event.target.closest(".key");
+  if (!key) return;
+  focusArea();
+  let cursor = textarea.selectionStart;
+
+  if (/Escape|CapsLock|Shift|Control|Alt|Lang/.test(key.dataset.code)) {
+    return;
+  }
+
+  if (/Backspace/.test(key.dataset.code)) {
+    textarea.value =
+      textarea.value.slice(0, cursor - 1) + textarea.value.slice(cursor);
+    textarea.setSelectionRange(cursor - 1, cursor - 1);
+    return;
+  }
+
+  if (/Delete/.test(key.dataset.code)) {
+    textarea.value =
+      textarea.value.slice(0, cursor) + textarea.value.slice(cursor + 1);
+    textarea.setSelectionRange(cursor, cursor);
+    return;
+  }
+
+  if (/Enter/.test(key.dataset.code)) {
+    textarea.value =
+      textarea.value.slice(0, cursor) + "\n" + textarea.value.slice(cursor);
+    textarea.setSelectionRange(cursor + 1, cursor + 1);
+    return;
+  }
+
+  if (/Space/.test(key.dataset.code)) {
+    textarea.value =
+      textarea.value.slice(0, cursor) + " " + textarea.value.slice(cursor);
+    textarea.setSelectionRange(cursor + 1, cursor + 1);
+    return;
+  }
+
+  if (/Tab/.test(key.dataset.code)) {
+    textarea.value =
+      textarea.value.slice(0, cursor) + "\t" + textarea.value.slice(cursor);
+    textarea.setSelectionRange(cursor + 1, cursor + 1);
+    return;
+  }
+
+  textarea.value =
+    textarea.value.slice(0, cursor) +
+    key.firstElementChild.dataset.content +
+    textarea.value.slice(cursor);
+  textarea.setSelectionRange(cursor + 1, cursor + 1);
+  // focusArea();
+}
+
 // обработчик клавиатуры - нажатие
 function handClickDown(event) {
+  focusArea();
   // console.log("жмяк");
-  // console.log(event);
+  console.log(event);
   const curr = event;
   document.querySelector(`[data-code="${curr.code}"]`).classList.add("active");
   if (curr.code === "Tab") {
     curr.preventDefault();
   }
+  if (curr.key === "Alt") {
+    curr.preventDefault();
+  }
 }
 // обработчик клавиатуры - подьем
 function handClickUp(event) {
+  focusArea();
   // console.log("не жмяк");
   // console.log(event);
   const curr = event;
@@ -347,14 +406,26 @@ function handClickUp(event) {
     .classList.remove("active");
 }
 
+// фокусровка
+
+function focusArea() {
+  const textarea = document.querySelector(".display");
+  textarea.focus();
+}
+
 const keyboard = document.querySelector(".keys");
 keyboard.addEventListener("mousedown", mouseClickDown);
 keyboard.addEventListener("mouseup", mouseClickUp);
-// keyboard.addEventListener("click", mouseClickKey);
+keyboard.addEventListener("click", mouseClickKey);
 document.addEventListener("keydown", handClickDown);
 document.addEventListener("keyup", handClickUp);
 
 createKeyboard(lang, mode);
+
+// фокус на дисплее
+const textarea = document.querySelector(".display");
+textarea.focus();
+
 // }
 
 // runApp();
