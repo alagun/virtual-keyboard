@@ -79,7 +79,7 @@ body {
   background: #dfdfdf;
 } */
 .key:active,
-.key .active {
+.key.active {
   color: orangered;
   box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #ffffff;
   background: #dfdfdf;

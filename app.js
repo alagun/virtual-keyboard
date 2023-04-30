@@ -280,10 +280,10 @@ const ru = {
     "ctrl alt ё space ru alt ᐊ ᐁ ᐅ del",
   ],
 };
-function letter(e) {
-  console.log(e);
-}
-addEventListener("keydown", letter);
+// function letter(e) {
+//   console.log(e);
+// }
+// addEventListener("keydown", letter);
 
 //вставляем каркас будущей клавы
 const virtualKeyboard = document.getElementById("virtual__keyboard");
@@ -298,7 +298,6 @@ const currentLangObj = (lang) => {
 function createKeyboard(lang, mode) {
   let rowArr = document.querySelectorAll(".row");
   let currObj = currentLangObj(lang);
-
   // console.log(currObj[mode]);
   currObj[mode].forEach((el, ind) => {
     let symbolArr = el.split(" ");
@@ -312,6 +311,48 @@ function createKeyboard(lang, mode) {
     }
   });
 }
+
+// обработчик кликов - нажатие
+function mouseClickDown(event) {
+  const key = event.target.closest(".key");
+  if (!key) return;
+  key.classList.add("active");
+}
+
+// обработчик кликов - отпускание
+function mouseClickUp(event) {
+  const key = event.target.closest(".key");
+  if (!key) return;
+  key.classList.remove("active");
+}
+
+// обработчик кликов - ключ
+// обработчик клавиатуры - нажатие
+function handClickDown(event) {
+  // console.log("жмяк");
+  // console.log(event);
+  const curr = event;
+  document.querySelector(`[data-code="${curr.code}"]`).classList.add("active");
+  if (curr.code === "Tab") {
+    curr.preventDefault();
+  }
+}
+// обработчик клавиатуры - подьем
+function handClickUp(event) {
+  // console.log("не жмяк");
+  // console.log(event);
+  const curr = event;
+  document
+    .querySelector(`[data-code="${curr.code}"]`)
+    .classList.remove("active");
+}
+
+const keyboard = document.querySelector(".keys");
+keyboard.addEventListener("mousedown", mouseClickDown);
+keyboard.addEventListener("mouseup", mouseClickUp);
+// keyboard.addEventListener("click", mouseClickKey);
+document.addEventListener("keydown", handClickDown);
+document.addEventListener("keyup", handClickUp);
 
 createKeyboard(lang, mode);
 // }
