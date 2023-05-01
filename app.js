@@ -329,10 +329,14 @@ function mouseClickUp(event) {
 // обработчик кликов - ключ
 function mouseClickKey(event) {
   // console.log("жмяк - код");
+  // console.log(event);
   const key = event.target.closest(".key");
+  // console.log(key.dataset.code);
+
   if (!key) return;
   focusArea();
   let cursor = textarea.selectionStart;
+  console.log(cursor);
 
   if (/Escape|CapsLock|Shift|Control|Alt|Lang/.test(key.dataset.code)) {
     return;
@@ -373,23 +377,105 @@ function mouseClickKey(event) {
     return;
   }
 
+  if (/ArrowUp/.test(key.dataset.code)) {
+    let arrStr = textarea.value.split("\n").map((e) => e.length);
+    let sumLenStr = 0;
+    for (let strNumber = 0; strNumber < arrStr.length; strNumber++) {
+      sumLenStr +=
+        strNumber + 1 < arrStr.length
+          ? arrStr[strNumber] + 1
+          : arrStr[strNumber];
+      if (cursor <= arrStr[0]) {
+        textarea.setSelectionRange(0, 0);
+        break;
+      } else if (cursor <= sumLenStr) {
+        if (
+          cursor - (sumLenStr - arrStr[strNumber] - 1) >
+          arrStr[strNumber - 1]
+        ) {
+          textarea.setSelectionRange(
+            cursor - (cursor - (sumLenStr - arrStr[strNumber] - 1)) - 1,
+            cursor - (cursor - (sumLenStr - arrStr[strNumber] - 1)) - 1
+          );
+        } else {
+          textarea.setSelectionRange(
+            cursor - arrStr[strNumber - 1] - 1,
+            cursor - arrStr[strNumber - 1] - 1
+          );
+        }
+        break;
+      }
+    }
+    return;
+  }
+  if (/ArrowLeft/.test(key.dataset.code)) {
+    textarea.setSelectionRange(
+      cursor !== 0 ? cursor - 1 : 0,
+      cursor !== 0 ? cursor - 1 : 0
+    );
+    return;
+  }
+  if (/ArrowDown/.test(key.dataset.code)) {
+    let arrStr = textarea.value.split("\n").map((e) => e.length);
+    let sumLenStr = 0;
+    for (let strNumber = 0; strNumber < arrStr.length; strNumber++) {
+      sumLenStr +=
+        strNumber + 1 < arrStr.length
+          ? arrStr[strNumber] + 1
+          : arrStr[strNumber];
+      if (cursor < sumLenStr) {
+        if (strNumber + 1 === arrStr.length) {
+          textarea.setSelectionRange(
+            textarea.value.length,
+            textarea.value.length
+          );
+          break;
+        } else {
+          if (
+            cursor - (sumLenStr - arrStr[strNumber] - 1) >
+            arrStr[strNumber + 1]
+          ) {
+            textarea.setSelectionRange(
+              sumLenStr + arrStr[strNumber + 1],
+              sumLenStr + arrStr[strNumber + 1]
+            );
+          } else {
+            textarea.setSelectionRange(
+              cursor + arrStr[strNumber] + 1,
+              cursor + arrStr[strNumber] + 1
+            );
+          }
+          break;
+        }
+      }
+    }
+    return;
+  }
+  if (/ArrowRight/.test(key.dataset.code)) {
+    textarea.setSelectionRange(cursor + 1, cursor + 1);
+    return;
+  }
+
   textarea.value =
     textarea.value.slice(0, cursor) +
     key.firstElementChild.dataset.content +
     textarea.value.slice(cursor);
   textarea.setSelectionRange(cursor + 1, cursor + 1);
-  // focusArea();
 }
 
 // обработчик клавиатуры - нажатие
 function handClickDown(event) {
   focusArea();
-  // console.log("жмяк");
-  console.log(event);
   const curr = event;
   document.querySelector(`[data-code="${curr.code}"]`).classList.add("active");
+  let cursor = textarea.selectionStart;
+  console.log(cursor);
   if (curr.code === "Tab") {
     curr.preventDefault();
+    textarea.value =
+      textarea.value.slice(0, cursor) + "\t" + textarea.value.slice(cursor);
+    textarea.setSelectionRange(cursor + 1, cursor + 1);
+    return;
   }
   if (curr.key === "Alt") {
     curr.preventDefault();
@@ -398,8 +484,6 @@ function handClickDown(event) {
 // обработчик клавиатуры - подьем
 function handClickUp(event) {
   focusArea();
-  // console.log("не жмяк");
-  // console.log(event);
   const curr = event;
   document
     .querySelector(`[data-code="${curr.code}"]`)
@@ -407,7 +491,6 @@ function handClickUp(event) {
 }
 
 // фокусровка
-
 function focusArea() {
   const textarea = document.querySelector(".display");
   textarea.focus();
@@ -425,6 +508,14 @@ createKeyboard(lang, mode);
 // фокус на дисплее
 const textarea = document.querySelector(".display");
 textarea.focus();
+
+// // для проверки
+
+// textarea.innerHTML = `123456789
+// 1234
+// 123456789
+// 123456789`;
+// textarea.setSelectionRange(22, 22);
 
 // }
 
