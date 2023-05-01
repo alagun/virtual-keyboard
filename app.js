@@ -604,17 +604,19 @@ function handClickUp(event) {
     delete pressedKeys[curr.code];
     curr.preventDefault();
   }
-  if (pressedKeys.ShiftLeft || pressedKeys.ShiftRight) {
-    if (mode === "capsOnShift") {
-      mode = "caps";
-      lang = currentLangObj();
-      createKeyboard(lang, mode);
-      delete pressedKeys[curr.code];
-    } else if (mode === "shift") {
-      mode = "normal";
-      lang = currentLangObj();
-      createKeyboard(lang, mode);
-      delete pressedKeys[curr.code];
+  if (curr.key === "Shift") {
+    if (pressedKeys.ShiftLeft || pressedKeys.ShiftRight) {
+      if (mode === "capsOnShift") {
+        mode = "caps";
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+        delete pressedKeys[curr.code];
+      } else if (mode === "shift") {
+        mode = "normal";
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+        delete pressedKeys[curr.code];
+      }
     }
   }
 }
