@@ -1,7 +1,6 @@
 // async function runApp() {
 
-let lang = "en";
-// let lang = "ru";
+localStorage.setItem("lang", localStorage.getItem("lang") || "en");
 let mode = "normal";
 // let mode = "shift";
 // let mode = "caps";
@@ -9,8 +8,10 @@ let mode = "normal";
 
 const keyboardHTML = `
 <div class="keyboard_wrapper">
-<textarea class="display">
+<label for='v-k' class='title'>VIRTUAL KEYBOARD</label>
+<textarea name='v-k'class="display">
 </textarea>
+<div class="rev"><span>Change language LeftShift + LeftAlt</span></div>
 <div class="keys">
   <div class="row row1">
     <div class="key esc" data-code="Escape">
@@ -289,12 +290,15 @@ const virtualKeyboard = document.getElementById("virtual__keyboard");
 virtualKeyboard.insertAdjacentHTML("afterbegin", keyboardHTML);
 
 // определение языка
-const currentLangObj = (lang) => {
-  return lang === "en" ? en : ru;
+const currentLangObj = () => {
+  return localStorage.getItem("lang") === "en" ? en : ru;
 };
 
+// нажатые клавиши
+const pressedKeys = {};
+
 // отрисовка клавиатуры
-function createKeyboard(lang, mode) {
+function createKeyboard(lang = "en", mode) {
   let rowArr = document.querySelectorAll(".row");
   let currObj = currentLangObj(lang);
   // console.log(currObj[mode]);
@@ -316,6 +320,19 @@ function mouseClickDown(event) {
   const key = event.target.closest(".key");
   if (!key) return;
   key.classList.add("active");
+
+  if (key.id === "lang") {
+    console.log("change lang");
+    if (localStorage.getItem("lang") === "en") {
+      localStorage.setItem("lang", "ru");
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else {
+      localStorage.setItem("lang", "en");
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
 }
 
 // обработчик кликов - отпускание
@@ -465,11 +482,12 @@ function mouseClickKey(event) {
 
 // обработчик клавиатуры - нажатие
 function handClickDown(event) {
+  // console.log(event);
   focusArea();
   const curr = event;
   document.querySelector(`[data-code="${curr.code}"]`).classList.add("active");
   let cursor = textarea.selectionStart;
-  console.log(cursor);
+  // console.log(cursor);
   if (curr.code === "Tab") {
     curr.preventDefault();
     textarea.value =
@@ -477,8 +495,37 @@ function handClickDown(event) {
     textarea.setSelectionRange(cursor + 1, cursor + 1);
     return;
   }
+  if (curr.code === "AltLeft") {
+    pressedKeys[curr.code] = true;
+    if (pressedKeys.ShiftLeft) {
+      if (localStorage.getItem("lang") === "en") {
+        localStorage.setItem("lang", "ru");
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+      } else {
+        localStorage.setItem("lang", "en");
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+      }
+    }
+    curr.preventDefault();
+  }
   if (curr.key === "Alt") {
     curr.preventDefault();
+  }
+  if (curr.code === "ShiftLeft") {
+    pressedKeys[curr.code] = true;
+    if (pressedKeys.AltLeft) {
+      if (localStorage.getItem("lang") === "en") {
+        localStorage.setItem("lang", "ru");
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+      } else {
+        localStorage.setItem("lang", "en");
+        lang = currentLangObj();
+        createKeyboard(lang, mode);
+      }
+    }
   }
 }
 // обработчик клавиатуры - подьем
@@ -488,6 +535,13 @@ function handClickUp(event) {
   document
     .querySelector(`[data-code="${curr.code}"]`)
     .classList.remove("active");
+  if (curr.code === "AltLeft") {
+    delete pressedKeys[curr.code];
+    curr.preventDefault();
+  }
+  if (curr.code === "ShiftLeft") {
+    delete pressedKeys[curr.code];
+  }
 }
 
 // фокусровка
