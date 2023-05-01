@@ -144,7 +144,7 @@ const keyboardHTML = `
     </div>
   </div>
   <div class="row row4">
-    <div class="key shift-left" data-code="ShiftLeft">
+    <div class="key shift-left" id="shift-left" data-code="ShiftLeft">
       <span></span>
     </div>
     <div class="key" data-code="KeyZ">
@@ -180,7 +180,7 @@ const keyboardHTML = `
     <div class="key up" data-code="ArrowUp">
       <span></span>
     </div>
-    <div class="key shift-right" data-code="ShiftRight">
+    <div class="key shift-right" id="shift-right" data-code="ShiftRight">
       <span></span>
     </div>
   </div>
@@ -318,6 +318,7 @@ function createKeyboard(lang = "en", mode) {
 // обработчик кликов - нажатие
 function mouseClickDown(event) {
   const key = event.target.closest(".key");
+  // console.log(key);
   if (!key) return;
   key.classList.add("active");
 
@@ -333,6 +334,30 @@ function mouseClickDown(event) {
       createKeyboard(lang, mode);
     }
   }
+  if (key.id === "caps") {
+    if (mode != "caps") {
+      key.classList.toggle("caps-lock__active");
+      mode = "caps";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else {
+      key.classList.toggle("caps-lock__active");
+      mode = "normal";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
+  if (key.id === "shift-left" || key.id === "shift-right") {
+    if (mode === "normal") {
+      mode = "shift";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else if (mode === "caps") {
+      mode = "capsOnShift";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
 }
 
 // обработчик кликов - отпускание
@@ -340,7 +365,17 @@ function mouseClickUp(event) {
   const key = event.target.closest(".key");
   if (!key) return;
   key.classList.remove("active");
-  // console.log(key.firstElementChild.innerText);
+  if (key.id === "shift-left" || key.id === "shift-right") {
+    if (mode === "shift") {
+      mode = "normal";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else if (mode === "capsOnShift") {
+      mode = "shift";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
 }
 
 // обработчик кликов - ключ
@@ -348,7 +383,6 @@ function mouseClickKey(event) {
   // console.log("жмяк - код");
   // console.log(event);
   const key = event.target.closest(".key");
-  // console.log(key.dataset.code);
 
   if (!key) return;
   focusArea();
@@ -527,7 +561,38 @@ function handClickDown(event) {
       }
     }
   }
+  if (curr.code === "CapsLock") {
+    console.log(curr);
+    if (mode === "normal") {
+      mode = "caps";
+      document
+        .querySelector(`[data-code="${curr.code}"]`)
+        .classList.toggle("caps-lock__active");
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else {
+      mode = "normal";
+      document
+        .querySelector(`[data-code="${curr.code}"]`)
+        .classList.remove("caps-lock__active");
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
+  if (curr.code === "ShiftLeft" || curr.code === "ShiftRight") {
+    pressedKeys[curr.code] = true;
+    if (mode === "normal" || mode === "shift") {
+      mode = "shift";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    } else if (mode === "caps") {
+      mode = "capsOnShift";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+    }
+  }
 }
+
 // обработчик клавиатуры - подьем
 function handClickUp(event) {
   focusArea();
@@ -539,8 +604,18 @@ function handClickUp(event) {
     delete pressedKeys[curr.code];
     curr.preventDefault();
   }
-  if (curr.code === "ShiftLeft") {
-    delete pressedKeys[curr.code];
+  if (pressedKeys.ShiftLeft || pressedKeys.ShiftRight) {
+    if (mode === "capsOnShift") {
+      mode = "caps";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+      delete pressedKeys[curr.code];
+    } else if (mode === "shift") {
+      mode = "normal";
+      lang = currentLangObj();
+      createKeyboard(lang, mode);
+      delete pressedKeys[curr.code];
+    }
   }
 }
 
@@ -562,14 +637,6 @@ createKeyboard(lang, mode);
 // фокус на дисплее
 const textarea = document.querySelector(".display");
 textarea.focus();
-
-// // для проверки
-
-// textarea.innerHTML = `123456789
-// 1234
-// 123456789
-// 123456789`;
-// textarea.setSelectionRange(22, 22);
 
 // }
 
