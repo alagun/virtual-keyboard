@@ -3,7 +3,10 @@
 * {
   box-sizing: border-box;
 }
-
+textarea:focus,
+input:focus {
+  outline: none;
+}
 body {
   font-family: "Roboto", sans-serif;
   margin: 0;
@@ -59,10 +62,8 @@ body {
   margin-top: 20px;
 }
 .row {
-  /* text-transform: lowercase; */
   display: flex;
   gap: 10px;
-  /* может надо удалить снизу марджин */
   margin-bottom: 10px;
 }
 
@@ -81,17 +82,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.key span:hover,
-.key span .active {
-  /* border-color: orange; */
-  /* color: orangered; */
-}
-/* .key span:active,
-.key span .active {
-  color: orangered;
-  box-shadow: inset 3px 3px 6px #0002, inset -3px -3px 6px #ffffff;
-  background: #dfdfdf;
-} */
+
 .caps-lock__active,
 .key:active,
 .key.active {
@@ -115,7 +106,6 @@ body {
 .down,
 .right {
   background: #e0e0e0;
-  /* background: #f1ffff; */
 }
 .backspace,
 .tab,
@@ -141,6 +131,4 @@ body {
 }
 .shift-left {
   width: calc(50px * 2 + 10px);
-}
-.backquote {
 }
