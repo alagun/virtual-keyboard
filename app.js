@@ -499,7 +499,7 @@ async function runApp() {
       textarea.setSelectionRange(cursor + 1, cursor + 1);
       return;
     }
-    const { oKey } = key.firstElementChild.dataset;
+    const oKey = key.firstElementChild.dataset;
     textarea.value = textarea.value.slice(0, cursor) + oKey.content + textarea.value.slice(cursor);
     textarea.setSelectionRange(cursor + 1, cursor + 1);
   };
